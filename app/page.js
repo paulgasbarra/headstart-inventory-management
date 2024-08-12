@@ -163,7 +163,7 @@ export default function Home() {
             onChange={filterItems}
           />
         </Box>
-        <Stack width="800px" height="300px" spacing={2} overflow={'auto'}>
+        <Stack width="800px" height="600px" spacing={2} overflow={'auto'}>
           {filteredItems.map((item) => <Item 
             key={item.name} 
             item={item} 
