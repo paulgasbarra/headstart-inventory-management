@@ -33,6 +33,8 @@ export default function Home() {
   const [inventory, setInventory] = useState([])
   const [open, setOpen] = useState(false)
   const [itemName, setItemName] = useState('')
+  const [filterText, setFilterText] = useState('');
+  const [filteredItems, setFilteredItems] = useState([]);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'pantry'))
@@ -42,6 +44,7 @@ export default function Home() {
       inventoryList.push({ name: doc.id, ...doc.data() })
     })
     setInventory(inventoryList)
+    setFilteredItems(inventoryList)
   }
 
   const addItem = async (item) => {
@@ -80,12 +83,20 @@ export default function Home() {
     await updateInventory()
   }
 
+  const filterItems = (e) => {
+    setFilterText(e.target.value)
+  }
+
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   
   useEffect(() => {
     updateInventory()
   }, [])
+
+  useEffect(() => {
+    setFilteredItems(inventory.filter((item) => item.name.toLowerCase().includes(filterText.toLowerCase())))
+  }, [filterText])
 
   return (
     <Box
@@ -104,7 +115,7 @@ export default function Home() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" color={"black"}>
             Add Item
           </Typography>
           <Stack width="100%" direction={'row'} spacing={2}>
@@ -138,15 +149,22 @@ export default function Home() {
           height="100px"
           bgcolor={'#ADD8E6'}
           display={'flex'}
-          justifyContent={'center'}
+          justifyContent={'space-around'}
           alignItems={'center'}
         >
           <Typography variant={'h2'} color={'#333'} textAlign={'center'}>
             Inventory Items
           </Typography>
+          <TextField
+            varient="standard"
+            type="search"
+            label="Filter"
+            value={filterText}
+            onChange={filterItems}
+          />
         </Box>
         <Stack width="800px" height="300px" spacing={2} overflow={'auto'}>
-          {inventory.map((item) => <Item 
+          {filteredItems.map((item) => <Item 
             key={item.name} 
             item={item} 
             removeItem={removeItem} 
