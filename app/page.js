@@ -103,9 +103,10 @@ export default function Home() {
       width="100vw"
       height="100vh"
       display={'flex'}
-      justifyContent={'center'}
+      justifyContent={'top'}
       flexDirection={'column'}
       alignItems={'center'}
+      paddingTop={'2rem'}
       gap={2}
     >
       <Modal
@@ -163,7 +164,7 @@ export default function Home() {
             onChange={filterItems}
           />
         </Box>
-        <Stack width="800px" height="600px" spacing={2} overflow={'auto'}>
+        <Stack width="800px" height="90vh" spacing={2} overflow={'auto'}>
           {filteredItems.map((item) => <Item 
             key={item.name} 
             item={item} 
